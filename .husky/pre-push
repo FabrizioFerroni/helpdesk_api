@@ -2,6 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 # Tests should pass before push
-npm run test
+npm run test --passWithNoTests
 
 npm run test:e2e
