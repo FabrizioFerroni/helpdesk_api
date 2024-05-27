@@ -1,0 +1,21 @@
+name: Deploy to Development on EasyPanel - https://demosfabriziodev.com/
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: push
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          API_SECRET_DEV: ${{ secrets.API_SECRET_DEV }}
+        run: |
+          curl -X GET "$WEBHOOK_URL/$API_SECRET_DEV"
