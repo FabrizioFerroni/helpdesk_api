@@ -10,8 +10,6 @@ import {
   Post,
   Put,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -39,19 +37,6 @@ export class RolController {
   constructor(private readonly rolService: RolService) {}
 
   @Get()
-  /*  @UsePipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: false,
-      validationError: {
-        target: false,
-      },
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
-    }),
-  ) */
   @ApiResponse({
     status: HttpStatus.OK,
     type: OkResponseDto,

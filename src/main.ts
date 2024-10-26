@@ -40,17 +40,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  /* app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: true,
-      validationError: {
-        target: false,
-      },
-    }),
-  ); */
   app.setGlobalPrefix(configStrings().apiVersion, { exclude: ['estado'] });
   setupSwagger(app, configService);
 
