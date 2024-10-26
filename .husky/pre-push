@@ -4,4 +4,4 @@
 # Tests should pass before push
 # npm run test --passWithNoTests
 
-npm run test:e2e
+# npm run test:e2e

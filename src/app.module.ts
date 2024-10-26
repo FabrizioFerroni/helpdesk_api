@@ -1,3 +1,5 @@
+import { MailService } from './core/services/mail.service';
+import { PaginationService } from './core/services/pagination.service';
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';

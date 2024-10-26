@@ -2,6 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { configApp } from '../app/config.app';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RolEntity } from '@/api/rol/entity/rol.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: configApp().database.username,
       password: configApp().database.password,
       database: configApp().database.database,
-      entities: [],
+      entities: [RolEntity],
       synchronize: true,
       verboseRetryLog: true,
     }),

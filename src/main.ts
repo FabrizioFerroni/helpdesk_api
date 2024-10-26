@@ -27,7 +27,6 @@ async function bootstrap() {
   });
 
   app.useGlobalFilters(new CustomExceptionFilter());
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -35,6 +34,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       validationError: {
         target: false,
+      },
+      transformOptions: {
+        enableImplicitConversion: true,
       },
     }),
   );
