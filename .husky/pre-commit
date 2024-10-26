@@ -1,11 +1,13 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# if [ "$branch" = "prod" ] || [ "$branch" = "pre" ] || [ "$branch" = "dev" ]; then
-#   echo "No puedes comitear directamente con la rama $branch"
-#   exit 1
-# fi
+if [ "$branch" = "prod" ] || [ "$branch" = "pre" ] || [ "$branch" = "dev" ]; then
+  echo "No puedes comitear directamente con la rama $branch"
+  exit 1
+fi
 
-npm run lint
+npm run lint:fix
+
+npm run format
 
 npx lint-staged

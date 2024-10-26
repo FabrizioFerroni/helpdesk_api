@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { RolModule } from './rol/rol.module';
 
 @Module({
-  imports: [],
+  imports: [RolModule],
   controllers: [],
   providers: [],
   exports: [],

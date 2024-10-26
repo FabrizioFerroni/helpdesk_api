@@ -19,6 +19,7 @@ export interface BaseInterfaceRepository<T> {
   findByCondition(filterCondition: FindOneOptions<T>): Promise<T>;
   findAll(options?: FindManyOptions<T>): Promise<T[] | T>;
   findBorrado(options?: FindOptionsWhere<T>): Promise<T>;
+  findAndCount(options?: FindManyOptions<T>): Promise<[T[], number]>;
   remove(data: T): Promise<T>;
   softRemove(data: T): Promise<T>;
   softDelete(data: string): Promise<UpdateResult>;

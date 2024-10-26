@@ -27,7 +27,6 @@ async function bootstrap() {
   });
 
   app.useGlobalFilters(new CustomExceptionFilter());
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -36,8 +35,22 @@ async function bootstrap() {
       validationError: {
         target: false,
       },
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
+
+  /* app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+      validationError: {
+        target: false,
+      },
+    }),
+  ); */
   app.setGlobalPrefix(configStrings().apiVersion, { exclude: ['estado'] });
   setupSwagger(app, configService);
 
