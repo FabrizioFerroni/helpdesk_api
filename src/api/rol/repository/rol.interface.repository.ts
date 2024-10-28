@@ -12,6 +12,7 @@ export abstract class RolInterfaceRepository extends BaseAbstractRepository<RolE
     take?: number,
   ): Promise<[RolEntity[], number]>;
   abstract getRoleById(id: string, deleted?: boolean): Promise<RolEntity>;
+  abstract getRoleByName(rol: string): Promise<RolEntity>;
   abstract deleteRolById(id: string): Promise<UpdateResult>;
   abstract updateRol(id: string, data: RolEntity): Promise<UpdateResult>;
   abstract obtenerRelaciones(): Promise<RolEntity[]>;

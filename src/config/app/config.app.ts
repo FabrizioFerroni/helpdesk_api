@@ -11,6 +11,10 @@ export const configApp = (): ConfigApp => {
     secret_jwt: process.env.SECRET_JWT || '',
     secret_jwt_register: process.env.SECRET_JWT_REGISTER || '',
     mailServiceUrl: process.env.URL_MAIL_SERVICE || '',
+    emailDefaultFabrizio: process.env.EMAIL_DEFAULT_FABRIZIO || '',
+    passwordDefaultFabrizio: process.env.PASSWORD_DEFAULT_FABRIZIO || '',
+    passwordDefaultAdmin: process.env.PASSWORD_DEFAULT_ADMIN || '',
+    passwordDefaultSoporte: process.env.PASSWORD_DEFAULT_SOPORTE || '',
     redis: {
       host: process.env.REDIS_HOST || 'localhost',
       port: Number(process.env.REDIS_PORT) || 6379,

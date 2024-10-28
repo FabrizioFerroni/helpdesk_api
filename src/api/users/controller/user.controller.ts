@@ -18,30 +18,30 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { PaginationDto } from '@/shared/utils/dtos/pagination.dto';
+import { UserService } from '../service/user.service';
 import { ErrorResponseDto } from '@/shared/utils/dtos/swagger/errorresponse.dto';
 import { OkResponseDto } from '@/shared/utils/dtos/swagger/okresponse.dto';
-import { CreateResponseDto } from '@/shared/utils/dtos/swagger/createresponse.dto';
-import { RolService } from '../service/rol.service';
-import { CreateRolDto } from '../dto/create-rol.dto';
-import { UpdateRolDto } from '../dto/update-rol.dto';
 import { validateQuerystringDto } from '@/shared/utils/functions/validate-querystring';
+import { PaginationDto } from '@/shared/utils/dtos/pagination.dto';
+import { CreateResponseDto } from '@/shared/utils/dtos/swagger/createresponse.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 const USUARIO_ID: string = '16b0c064-529e-4cf5-815a-489d31577495';
 
-@Controller('roles')
-@ApiTags('Roles')
+@Controller('users')
+@ApiTags('Users')
 @ApiBearerAuth()
 // @Authorize()
-export class RolController {
-  constructor(private readonly rolService: RolService) {}
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   @ApiResponse({
     status: HttpStatus.OK,
     type: OkResponseDto,
     description:
-      'Metodo para obtener todos los roles que existen en la base de datos',
+      'Metodo para obtener todos los usuarios que existen en la base de datos',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -59,7 +59,7 @@ export class RolController {
     description: 'Hubo un error interno en el servidor',
   })
   @ApiOperation({
-    summary: 'Obtiene todos los roles que existen en la base de datos',
+    summary: 'Obtiene todos los usuarios que existen en la base de datos',
   })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
@@ -72,14 +72,14 @@ export class RolController {
   ) {
     const param = await validateQuerystringDto(PaginationDto, query);
 
-    return this.rolService.findAll(deletedAt, USUARIO_ID, param);
+    return this.userService.getAllUsers(USUARIO_ID, param, deletedAt);
   }
 
   @Get(':id')
   @ApiResponse({
     status: HttpStatus.OK,
     type: OkResponseDto,
-    description: 'Metodo para obtener un rol por id',
+    description: 'Metodo para obtener un usuario por id',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -94,23 +94,23 @@ export class RolController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     type: ErrorResponseDto,
-    description: 'Rol no encontrado',
+    description: 'Usuario no encontrado',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: ErrorResponseDto,
     description: 'Hubo un error interno en el servidor',
   })
-  @ApiOperation({ summary: 'Buscar un rol por el id' })
+  @ApiOperation({ summary: 'Buscar un usuario por el id' })
   async findOne(@Param('id') id: string) {
-    return await this.rolService.getById(id);
+    return await this.userService.getUserById(id);
   }
 
   @Post()
   @ApiResponse({
     status: HttpStatus.CREATED,
     type: CreateResponseDto,
-    description: 'Metodo para crear un nuevo rol',
+    description: 'Metodo para crear un nuevo usuario',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -123,25 +123,20 @@ export class RolController {
     description: 'No autorizado',
   })
   @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    type: ErrorResponseDto,
-    description: 'Rol no encontrado',
-  })
-  @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: ErrorResponseDto,
     description: 'Hubo un error interno en el servidor',
   })
-  @ApiOperation({ summary: 'Agregar un nuevo rol' })
-  async create(@Body() dto: CreateRolDto) {
-    return await this.rolService.createRol(dto, true, USUARIO_ID);
+  @ApiOperation({ summary: 'Agregar un nuevo usuario' })
+  async create(@Body() dto: CreateUserDto) {
+    return await this.userService.createNewUser(dto, true, USUARIO_ID);
   }
 
   @Put(':id')
   @ApiResponse({
     status: HttpStatus.OK,
     type: OkResponseDto,
-    description: 'Metodo para editar un rol por id',
+    description: 'Metodo para editar un usuario por id',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -156,23 +151,23 @@ export class RolController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     type: ErrorResponseDto,
-    description: 'Rol no encontrado',
+    description: 'Usuario no encontrado',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: ErrorResponseDto,
     description: 'Hubo un error interno en el servidor',
   })
-  @ApiOperation({ summary: 'Editar un rol por su id' })
-  async update(@Param('id') id: string, @Body() dto: UpdateRolDto) {
-    return await this.rolService.updateRol(id, dto, true, USUARIO_ID);
+  @ApiOperation({ summary: 'Editar un usuario por su id' })
+  async update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+    return await this.userService.updateUser(id, dto, USUARIO_ID);
   }
 
   @Delete(':id')
   @ApiResponse({
     status: HttpStatus.OK,
     type: OkResponseDto,
-    description: 'Metodo para eliminar un rol por id',
+    description: 'Metodo para eliminar un usuario por id',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -187,23 +182,23 @@ export class RolController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     type: ErrorResponseDto,
-    description: 'Rol no encontrado',
+    description: 'Usuario no encontrado',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: ErrorResponseDto,
     description: 'Hubo un error interno en el servidor',
   })
-  @ApiOperation({ summary: 'Elimina un rol por el id' })
+  @ApiOperation({ summary: 'Elimina un usuario por el id' })
   async remove(@Param('id') id: string) {
-    return await this.rolService.deleteRol(id, USUARIO_ID);
+    return await this.userService.deleteUser(id, USUARIO_ID);
   }
 
   @Post(':id')
   @ApiResponse({
     status: HttpStatus.OK,
     type: OkResponseDto,
-    description: 'Metodo para restaurar un rol borrado por id',
+    description: 'Metodo para restaurar un usuario borrado por id',
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
@@ -218,7 +213,7 @@ export class RolController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     type: ErrorResponseDto,
-    description: 'Rol no encontrado',
+    description: 'Usuario no encontrado',
   })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -226,8 +221,8 @@ export class RolController {
     description: 'Hubo un error interno en el servidor',
   })
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Restaurar un rol borrado por su id' })
+  @ApiOperation({ summary: 'Restaurar un usuario borrado por su id' })
   async recovery(@Param('id') id: string) {
-    return await this.rolService.restoreRol(id, USUARIO_ID);
+    return await this.userService.restoreUser(id, USUARIO_ID);
   }
 }

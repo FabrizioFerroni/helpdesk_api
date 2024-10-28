@@ -44,6 +44,9 @@ export class RolRepository
     const options: FindManyOptions<RolEntity> = {
       skip,
       take,
+      order: {
+        createdAt: 'DESC',
+      },
     };
 
     if (deletedAt) {
@@ -54,6 +57,15 @@ export class RolRepository
     }
 
     return await this.findAndCount(options);
+  }
+
+  async getRoleByName(rol: string): Promise<RolEntity> {
+    const option = {
+      where: {
+        rol: String(rol),
+      },
+    };
+    return await this.findByCondition(option);
   }
 
   async getRoleById(id: string): Promise<RolEntity> {

@@ -10,6 +10,10 @@ export type ConfigApp = {
   mailServiceUrl: string;
   passPrivateKey: string;
   database: DbConfig;
+  emailDefaultFabrizio: string;
+  passwordDefaultFabrizio: string;
+  passwordDefaultAdmin: string;
+  passwordDefaultSoporte: string;
 };
 
 export type ConfigAppRedis = {
