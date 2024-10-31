@@ -22,6 +22,7 @@ import { plainToInstance } from 'class-transformer';
 import { RolMessages } from '../messages/rol.messages';
 import { UpdateRolDto } from '../dto/update-rol.dto';
 import { UpdateResult } from 'typeorm';
+import { UserService } from '@/api/users/service/user.service';
 
 const KEY: string = 'roles';
 @Injectable()
@@ -116,6 +117,19 @@ export class RolService {
     }
 
     return this.transform.transformDtoObject(rol, ResponseRolDto);
+  }
+
+  async getRoleByName(rol: string) {
+    const rol_resp = await this.rolRepository.getRoleByName(rol);
+
+    if (!rol_resp) {
+      this.logger.warn(
+        `No se ha encontrado un rol con el nombre: ${rol} en nuestra base de datos.`,
+      );
+      throw new NotFoundException(RolMessagesError.ROL_NOT_FOUND);
+    }
+
+    return this.transform.transformDtoObject(rol_resp, ResponseRolDto);
   }
 
   async createRol(dto: CreateRolDto, isWeb: boolean, usuario_id?: string) {

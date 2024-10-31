@@ -1,5 +1,3 @@
-import { MailService } from './core/services/mail.service';
-import { PaginationService } from './core/services/pagination.service';
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -14,6 +12,8 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { ResponseInterceptor } from './shared/interceptors/response.interceptor';
 import { DatabaseModule } from './config/database/database.module';
 import { configApp } from './config/app/config.app';
+import { AuthModule } from './auth/auth.module';
+import { RoleGuard } from './auth/guards/role.guard';
 
 @Module({
   imports: [
@@ -48,6 +48,7 @@ import { configApp } from './config/app/config.app';
       },
     ]),
     CoreModule,
+    AuthModule,
     ApiModule,
     DatabaseModule,
   ],
@@ -56,6 +57,10 @@ import { configApp } from './config/app/config.app';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    /*  {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    }, */
     {
       provide: APP_FILTER,
       useClass: CustomExceptionFilter,

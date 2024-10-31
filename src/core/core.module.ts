@@ -4,6 +4,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PaginationService } from './services/pagination.service';
 import { MailService } from './services/mail.service';
+import { DecryptCredentialService } from './services/decrypt-credential.service';
+import { DecriptHeaderBodyMiddleware } from './middlewares/decriptheaderbody.middleware';
 
 @Module({
   imports: [
@@ -14,7 +16,17 @@ import { MailService } from './services/mail.service';
     }),
     HttpModule,
   ],
-  providers: [PaginationService, MailService],
-  exports: [PaginationService, MailService],
+  providers: [
+    PaginationService,
+    MailService,
+    DecryptCredentialService,
+    DecriptHeaderBodyMiddleware,
+  ],
+  exports: [
+    PaginationService,
+    MailService,
+    DecryptCredentialService,
+    DecriptHeaderBodyMiddleware,
+  ],
 })
 export class CoreModule {}

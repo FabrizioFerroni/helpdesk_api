@@ -20,7 +20,7 @@ export class RolEntity {
   @Column({ nullable: true })
   description: string;
 
-  @CreateDateColumn({ name: 'created_at', select: false })
+  @CreateDateColumn({ name: 'created_at', select: true })
   createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at', select: false })

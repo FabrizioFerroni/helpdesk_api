@@ -54,12 +54,6 @@ export class RolController {
     description: 'No autorizado',
   })
   @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    type: ErrorResponseDto,
-    isArray: false,
-    description: 'Rol no encontrado',
-  })
-  @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: ErrorResponseDto,
     description: 'Hubo un error interno en el servidor',
