@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ConfigModule } from '@nestjs/config';
 import { configApp } from '@/config/app/config.app';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { TokenModule } from '../token/token.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
       envFilePath: [`${process.cwd()}/.env`], //.${process.env.NODE_ENV}.local
       load: [configApp],
     }),
+    TokenModule,
   ],
   controllers: [UserController],
   providers: [

@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe } from '@nestjs/common';
+import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { CustomExceptionFilter } from './core/filters/exceptions.filter';
 import { setupSwagger } from './config/swagger/config.swagger.app';
 import { configStrings } from './config/app/config.string';
@@ -40,7 +40,9 @@ async function bootstrap() {
       },
     }),
   );
-  app.setGlobalPrefix(configStrings().apiVersion, { exclude: ['estado'] });
+  app.setGlobalPrefix(configStrings().apiVersion, {
+    exclude: ['estado', { path: 'auth/(.*)', method: RequestMethod.ALL }],
+  });
   setupSwagger(app, configService);
 
   await app.listen(apiPort);

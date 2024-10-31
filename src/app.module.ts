@@ -13,6 +13,7 @@ import { ResponseInterceptor } from './shared/interceptors/response.interceptor'
 import { DatabaseModule } from './config/database/database.module';
 import { configApp } from './config/app/config.app';
 import { AuthModule } from './auth/auth.module';
+import { RoleGuard } from './auth/guards/role.guard';
 
 @Module({
   imports: [
@@ -47,15 +48,19 @@ import { AuthModule } from './auth/auth.module';
       },
     ]),
     CoreModule,
+    AuthModule,
     ApiModule,
     DatabaseModule,
-    AuthModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    /*  {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    }, */
     {
       provide: APP_FILTER,
       useClass: CustomExceptionFilter,

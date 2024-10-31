@@ -29,6 +29,12 @@ import { RolService } from '@/api/rol/service/rol.service';
 import { ResponseRolDto } from '@/api/rol/dto/response/response-rol.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UpdateResult } from 'typeorm';
+import { CreateTokenDto } from '@/api/token/dto/create-token.dto';
+import { AuthMessagesError } from '@/auth/error/error-messages';
+import { PayloadDto } from '@/auth/dto/payload.dto';
+import { MailService } from '@/core/services/mail.service';
+import { TokenService } from '@/api/token/service/token.service';
+import { configApp } from '@/config/app/config.app';
 
 const KEY: string = 'users';
 
@@ -38,6 +44,8 @@ export class UserService {
     timestamp: true,
   });
 
+  private bodyMail: Record<string, string> = {};
+
   constructor(
     @Inject(UserInterfaceRepository)
     private readonly userRepository: UserInterfaceRepository,
@@ -46,6 +54,8 @@ export class UserService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly paginationService: PaginationService,
     private readonly rolService: RolService,
+    private readonly mailService: MailService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async invalidateAllCacheKeys(usuario_id?: string) {
@@ -156,6 +166,19 @@ export class UserService {
     return this.transform.transformDtoObject(user, ResponseUserDto);
   }
 
+  async getRolesForUser(id: string): Promise<string[]> {
+    // Encuentra el usuario y carga el rol
+    const user = await this.userRepository.getUserById(id);
+
+    // Verifica si el usuario existe
+    if (!user || !user.rol) {
+      throw new Error('User or role not found');
+    }
+
+    // Devuelve un array con el nombre del rol
+    return [user.rol.rol];
+  }
+
   async createNewUser(dto: CreateUserDto, isWeb: boolean, usuario_id?: string) {
     const { firstName, lastName, email, phone, rol } = dto;
 
@@ -168,14 +191,55 @@ export class UserService {
     }
 
     if (!exist) {
+      const emailLW = email.toLowerCase();
+      if (isWeb) {
+        const token_id = crypto.randomUUID();
+
+        const payload: PayloadDto = {
+          email,
+          id: token_id,
+        };
+
+        const token = this.tokenService.generateJWTToken(payload, false, '24h');
+
+        this.bodyMail.email = emailLW;
+        this.bodyMail.nombre = firstName;
+        this.bodyMail.lastname = lastName;
+        this.bodyMail.url = `${configApp().appHost}/verify/${token}`;
+        this.bodyMail.subject =
+          'Gracias por registrarte, por favor confirma tu correo electronico';
+
+        const responseMail = await this.mailService.sendMail(
+          'register',
+          this.bodyMail,
+        );
+
+        if (!responseMail.ok) {
+          this.logger.warn(responseMail.message);
+          throw new InternalServerErrorException(
+            AuthMessagesError.INTERNAL_SERVER_ERROR,
+          );
+        }
+
+        const tokenData: CreateTokenDto = {
+          token: token.toString(),
+          email,
+          isUsed: false,
+          token_id,
+        };
+
+        this.tokenService.saveToken(tokenData);
+      }
+
       const rol_resp: ResponseRolDto = await this.rolService.getRoleByName(rol);
 
-      if (!rol) throw new NotFoundException(UserMessagesError.ROL_NOT_FOUND);
+      if (!rol_resp)
+        throw new NotFoundException(UserMessagesError.ROL_NOT_FOUND);
 
       const newUser = {
         firstName,
         lastName,
-        email,
+        email: emailLW,
         password: dto.password,
         rol: rol_resp.id,
         phone,
@@ -190,8 +254,6 @@ export class UserService {
           UserMessagesError.INTERNAL_SERVER_ERROR,
         );
       }
-
-      //TODO: Aquí deberia de enviar un correo con el token y demas cosas.
 
       this.invalidateAllCacheKeys(usuario_id);
 

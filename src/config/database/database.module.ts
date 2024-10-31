@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RolEntity } from '@/api/rol/entity/rol.entity';
 import { UserEntity } from '@/api/users/entity/user.entity';
+import { TokenEntity } from '@/api/token/entity/token.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { UserEntity } from '@/api/users/entity/user.entity';
       username: configApp().database.username,
       password: configApp().database.password,
       database: configApp().database.database,
-      entities: [RolEntity, UserEntity],
+      entities: [RolEntity, UserEntity, TokenEntity],
       synchronize: true,
       verboseRetryLog: true,
     }),
