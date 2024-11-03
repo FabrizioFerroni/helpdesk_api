@@ -1,0 +1,17 @@
+export enum CategoryMessagesError {
+  CATEGORY_ERROR = 'Oops... There were problems creating or editing the category. Please try again later',
+  CATEGORY_NOT_FOUND = 'Category not found',
+  SUBCATEGORY_NOT_FOUND = 'Subcategory not found',
+  CATEGORY_ALREADY_EXIST = 'Not possible run operation, category already exist',
+  CATEGORY_NOT_EXIST = 'Category or subcategory not exists',
+  SUBCATEGORY_ALREADY_EXIST = 'Not possible run operation, subcategory already exist',
+  INTERNAL_SERVER_ERROR = 'Internal server error. Contact with the administrator',
+  CATEGORY_NOT_FOUND_OR_NOT_ACTIVE = 'Category not found or not active',
+  CATEGORY_NOT_DELETED = 'Oops... There was an error deleting the category. Please try again later.',
+  CATEGORY_NOT_RESTORED = 'Oops... There was an error restoring the category. Please try again later.',
+  CATEGORY_NOT_UPDATED = 'Oops... There was an error updating the category. Please try again later.',
+  CATEGORY_NOT_SAVED = 'Ups... Hubo un error al crear o editar la categoría. Por favor, inténtelo de nuevo más tarde',
+  SUBCATEGORY_NOT_DELETED = 'Oops... There was an error deleting the subcategory. Please try again later.',
+  SUBCATEGORY_NOT_SAVED = 'Ups... Hubo un error al crear o editar la subcategoría. Por favor, reintente de nuevo más tarde',
+  SUBCATEGORY_NOT_RESTORED = 'Oops... There was an error restoring the subcategory. Please try again later.',
+}

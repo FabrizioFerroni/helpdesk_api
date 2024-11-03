@@ -263,6 +263,14 @@ export class AuthController {
   })
   @Authorize()
   @ApiBearerAuth()
+  /**
+   * Retrieves the profile information of the currently logged-in user.
+   *
+   * @param {UserEntity} user - The logged-in user entity containing the user ID.
+   * @returns {Promise<ResponseUserDto>} The user profile data.
+   *
+   * @throws {NotFoundException} If the user is not found.
+   */
   obtainUser(@User() { id }: UserEntity) {
     return this.usuarioService.getUserById(id);
   }

@@ -236,6 +236,8 @@ export class UserService {
       if (!rol_resp)
         throw new NotFoundException(UserMessagesError.ROL_NOT_FOUND);
 
+      await this.validateEmailBD(emailLW);
+
       const newUser = {
         firstName,
         lastName,
