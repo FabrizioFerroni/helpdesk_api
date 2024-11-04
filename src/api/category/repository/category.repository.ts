@@ -106,6 +106,19 @@ export class CategoryRepository
     return await this.findByCondition(option);
   }
 
+  async getCategoriesAndSubcategoriesForParentId({
+    id,
+  }: CategoryEntity): Promise<CategoryEntity[]> {
+    const option: FindManyOptions<CategoryEntity> = {
+      where: {
+        parent: { id },
+        status: true,
+      },
+      relations: ['parent'],
+    };
+    return await this.findAll(option);
+  }
+
   async saveCategory(data: CategoryEntity): Promise<CategoryEntity> {
     const create: CategoryEntity = this.create(data);
     const categorySaved: CategoryEntity = await this.save(create);

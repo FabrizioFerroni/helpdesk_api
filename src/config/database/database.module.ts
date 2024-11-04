@@ -6,6 +6,7 @@ import { RolEntity } from '@/api/rol/entity/rol.entity';
 import { UserEntity } from '@/api/users/entity/user.entity';
 import { TokenEntity } from '@/api/token/entity/token.entity';
 import { CategoryEntity } from '@/api/category/entity/category.entity';
+import { PriorityEntity } from '@/api/priority/entity/priority.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,13 @@ import { CategoryEntity } from '@/api/category/entity/category.entity';
       username: configApp().database.username,
       password: configApp().database.password,
       database: configApp().database.database,
-      entities: [RolEntity, UserEntity, TokenEntity, CategoryEntity],
+      entities: [
+        RolEntity,
+        UserEntity,
+        TokenEntity,
+        CategoryEntity,
+        PriorityEntity,
+      ],
       synchronize: true,
       verboseRetryLog: true,
     }),

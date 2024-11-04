@@ -23,6 +23,10 @@ export abstract class CategoryInterfaceRepository extends BaseAbstractRepository
   abstract getCategoriesAndSubcategoriesForType(
     type: CategoryType,
   ): Promise<CategoryEntity[]>;
+
+  abstract getCategoriesAndSubcategoriesForParentId(
+    parent: CategoryEntity,
+  ): Promise<CategoryEntity[]>;
   abstract getCategoryByName(name: string): Promise<CategoryEntity>;
   abstract saveCategory(data: CategoryEntity): Promise<CategoryEntity>;
   abstract updateCategory(

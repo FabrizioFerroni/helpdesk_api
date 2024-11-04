@@ -5,4 +5,5 @@ export const DefaultPageSize = {
   USERS: 10,
   ROLES: 10,
   CATEGORIES: 10,
+  PRIORITIES: 10,
 } as const satisfies Record<string, number>;
