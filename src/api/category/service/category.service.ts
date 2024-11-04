@@ -25,7 +25,7 @@ import { invalidateAllCacheKeys } from '@/shared/utils/functions/invalidate-cach
 import { CategoryMessages } from '../messages/category.messages';
 import { UpdateCategoryDto } from '../dtos/update-category.dto';
 import { UpdateResult } from 'typeorm';
-import { ChangeStatusCategoryDto } from '../dtos/change-status.dto';
+import { ChangeStatusDto } from '@/shared/utils/dtos/change-status.dto';
 
 const KEY: string = 'categories';
 
@@ -157,6 +157,21 @@ export class CategoryService {
       );
 
     return this.transform.transformDtoArray(categories, ResponseCategoryDto);
+  }
+
+  async getCategoriesAndSubcategoriesForParentId(parentId: string) {
+    const parent = await this.categoryRepository.getCategoryById(parentId);
+
+    if (!parent) {
+      throw new NotFoundException(CategoryMessagesError.CATEGORY_NOT_FOUND);
+    }
+
+    const subcategories =
+      await this.categoryRepository.getCategoriesAndSubcategoriesForParentId(
+        parent,
+      );
+
+    return this.transform.transformDtoArray(subcategories, ResponseCategoryDto);
   }
 
   async getCategoryById(id: string) {
@@ -346,7 +361,7 @@ export class CategoryService {
 
   async activeOrDesactiveCatSub(
     id: string,
-    { status }: ChangeStatusCategoryDto,
+    { status }: ChangeStatusDto,
     usuario_id?: string,
   ) {
     const category = await this.verifyCategory(id);

@@ -16,7 +16,7 @@ export class UpdateCategoryDto {
   @IsBoolean()
   @IsOptional()
   @Type(() => Boolean)
-  status: string;
+  status: boolean;
 
   @IsUUID()
   @IsOptional()

@@ -31,6 +31,6 @@ import { UsersModule } from '../users/users.module';
     },
     TransformDto,
   ],
-  exports: [],
+  exports: [CategoryService],
 })
 export class CategoryModule {}

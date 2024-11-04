@@ -31,7 +31,7 @@ import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/update-category.dto';
 import { Authorize } from '@/auth/decorators/authorized.decorator';
 import { CategoryType } from '../enum/category.enum';
-import { ChangeStatusCategoryDto } from '../dtos/change-status.dto';
+import { ChangeStatusDto } from '@/shared/utils/dtos/change-status.dto';
 
 @Controller('categories')
 @Authorize()
@@ -110,6 +110,38 @@ export class CategoryController {
   async findAllForType(@Param('type') type: CategoryType) {
     return await this.categoryService.getCategoriesAndSubcategoriesForType(
       type,
+    );
+  }
+
+  @Get('subcategories/:parentId')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: OkResponseDto,
+    description:
+      'Listar todas las subcategorias de la categoria que se pasa el id',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    type: ErrorResponseDto,
+    description: 'Datos incorrectos',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: ErrorResponseDto,
+    description: 'No autorizado',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    type: ErrorResponseDto,
+    description: 'Hubo un error interno en el servidor',
+  })
+  @ApiOperation({
+    summary: 'Listar todas las subcategorias de la categoria que se pasa el id',
+  })
+  @AuthorizedWithRoles('soporte', 'admin')
+  async findAllForStatus(@Param('parentId') parentId: string) {
+    return await this.categoryService.getCategoriesAndSubcategoriesForParentId(
+      parentId,
     );
   }
 
@@ -318,7 +350,7 @@ export class CategoryController {
   @AuthorizedWithRoles('admin')
   async activeCatSub(
     @Param('id') id: string,
-    @Body() status: ChangeStatusCategoryDto,
+    @Body() status: ChangeStatusDto,
     @User() { id: usuario_id }: UserEntity,
   ) {
     return await this.categoryService.activeOrDesactiveCatSub(
