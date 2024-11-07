@@ -37,4 +37,5 @@ export type DbConfig = {
   username: string;
   password: string;
   database: string;
+  timezone: string;
 };

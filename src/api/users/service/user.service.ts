@@ -140,7 +140,6 @@ export class UserService {
 
   async getUserById(id: string) {
     const user = await this.userRepository.getUserById(id);
-    delete user.password;
 
     if (!user) {
       this.logger.warn(
@@ -149,6 +148,7 @@ export class UserService {
       throw new NotFoundException(UserMessagesError.USER_NOT_FOUND);
     }
 
+    delete user.password;
     return this.transform.transformDtoObject(user, ResponseUserDto);
   }
 

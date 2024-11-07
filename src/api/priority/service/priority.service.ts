@@ -201,9 +201,9 @@ export class PriorityService {
     { status }: ChangeStatusDto,
     usuario_id?: string,
   ) {
-    const category = await this.verifyPriority(id);
+    const priority = await this.verifyPriority(id);
 
-    if (!category) {
+    if (!priority) {
       this.logger.warn(
         `activeOrDesactivePriority: No se ha encontrado una prioridad con el id: ${id} en nuestra base de datos`,
       );
@@ -213,12 +213,12 @@ export class PriorityService {
 
     const priorityToUpdate: Partial<PriorityEntity> = { status };
 
-    const categoryUpdateResult = await this.priorityRepository.updatePriority(
+    const priorityUpdateResult = await this.priorityRepository.updatePriority(
       id,
       priorityToUpdate as PriorityEntity,
     );
 
-    if (!categoryUpdateResult.affected) {
+    if (!priorityUpdateResult.affected) {
       throw new BadRequestException(PriorityMessagesError.PRIORITY_ERROR);
     }
 
@@ -252,8 +252,6 @@ export class PriorityService {
     const priorityExist =
       await this.priorityRepository.priorityAlreadyExistsById(id, true);
 
-    const category = await this.verifyPriority(id, true);
-
     if (!priorityExist) {
       this.logger.warn(
         `No se ha encontrado una prioridad con el id: ${id} en nuestra base de datos`,
@@ -262,10 +260,10 @@ export class PriorityService {
       throw new NotFoundException(PriorityMessagesError.PRIORITY_NOT_FOUND);
     }
 
-    const priorityDeleted: UpdateResult =
+    const priorityRestored: UpdateResult =
       await this.priorityRepository.restorePriority(id);
 
-    if (!priorityDeleted.affected) {
+    if (!priorityRestored.affected) {
       throw new BadRequestException(
         PriorityMessagesError.PRIORITY_NOT_RESTORED,
       );
