@@ -4,14 +4,16 @@ import { UsersModule } from './users/users.module';
 import { TokenModule } from './token/token.module';
 import { CategoryModule } from './category/category.module';
 import { PriorityModule } from './priority/priority.module';
+import { TicketsModule } from './tickets/tickets.module';
 
 @Module({
   imports: [
     CategoryModule,
+    PriorityModule,
     RolModule,
+    TicketsModule,
     TokenModule,
     UsersModule,
-    PriorityModule,
   ],
   controllers: [],
   providers: [],

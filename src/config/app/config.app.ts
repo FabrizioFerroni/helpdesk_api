@@ -35,6 +35,7 @@ export const configApp = (): ConfigApp => {
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || '',
       database: process.env.DATABASE_BASEDATOS || '',
+      timezone: process.env.DATABASE_TIMEZONE || '',
     },
   };
 };
